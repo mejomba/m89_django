@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% if publisher_books %}
+        {% for book in publisher_books %}
+        <li>{{ book.name }}</li>
+        {% endfor %}
+    {% else %}
+    <h3>کتابی وجود ندارد</h3>
+    {% endif %}
+</body>
+</html>
