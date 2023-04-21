@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+    {% for question in questions %}
+        <li>
+            {{ question.title }}
+        </li>
+    {% endfor %}
+
+    {% for answer in answers %}
+        <li>
+            {{ answer.title }}
+        </li>
+    {% endfor %}
+
+
+{% endblock %}

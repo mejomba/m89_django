@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for question in questions %}
+        <li><a href="{% url 'question_detail' question.id %}">{{ question.title }}</a>
+            <button><a href="{% url 'question_delete' question.id %}">خذف</a></button>
+            <button><a href="{% url 'question_update' question.id %}">آپدیت</a></button>
+        </li>
+    {% endfor %}
+{% endblock %}
+

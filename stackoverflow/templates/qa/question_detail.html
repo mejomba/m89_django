@@ -1,0 +1,12 @@
+<h3>{{ question.title }} ({{ question.user.username }})</h3>
+
+<p>{{ question.content }}</p>
+
+
+<ol>
+{% for answer in answers %}
+        <li>{{ answer.content }}</li>
+{% endfor %}
+</ol>
+
+
