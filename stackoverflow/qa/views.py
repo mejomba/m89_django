@@ -36,10 +36,11 @@ class QuestionDetail(generic.DetailView):
     model = Question
     template_name = 'qa/question_detail.html'
     context_object_name = 'question'
+    pk_url_kwarg = 'id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        answers = Answer.objects.filter(question_id=self.kwargs.get('pk'))
+        answers = Answer.objects.filter(question_id=self.kwargs.get('id'))
         context['answers'] = answers
         return context
 

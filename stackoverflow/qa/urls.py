@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('create_question', views.CreateQuestion.as_view(), name='create_question'),
     path('create_answer', views.CreateAnswer.as_view(), name='create_answer'),
-    path('question_detail-<int:pk>', views.QuestionDetail.as_view(), name='question_detail'),
+    path('question_detail-<int:id>', views.QuestionDetail.as_view(), name='question_detail'),
     path('users_questions_list', views.UserQuestionsList.as_view(), name='user_questions_list'),
     path('users_most_answered_list', views.UserMostAnsweredList.as_view(), name='users_most_answered_list'),
     path('question-<int:pk>', views.QuestionDetailPaginate.as_view(), name='question_detail_paginate'),
