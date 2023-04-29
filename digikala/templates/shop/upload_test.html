@@ -1,0 +1,47 @@
+{% load custom_template_tag %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mutliple Upload</title>
+    <style>
+        img {
+            height: 200px;
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="images" multiple>
+        <input type="text" name="name" >
+        <input type="text" name="count">
+        <input type="text" name="price">
+        <button type="submit">Upload</button>
+    </form>
+    <hr>
+
+    {% for img in images %}
+
+{#        {% with img.image|images_address as images_address_list %}#}
+{#            {{ images_address_list }}#}
+{#        {% endwith %}#}
+{#        {% for image in img.image %}#}
+{#            {{ image }}#}
+{#            <img src="{{image}}" alt="Image">#}
+{#        {% endfor %}#}
+
+
+        <br>
+    {% endfor %}
+
+{#{% with images.image|split:"," as skills %}#}
+{#    {% for skill in skills %}#}
+{#        {{ skill }}<br>#}
+{#    {% endfor %}#}
+{#{% endwith %}#}
+</body>
+</html>
