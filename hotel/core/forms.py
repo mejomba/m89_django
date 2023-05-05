@@ -14,3 +14,12 @@ class ReserveRoomForm(forms.ModelForm):
     class Meta:
         model = Room
         fields = '__all__'
+
+
+class CustomLoginForm(forms.Form):
+    username = forms.CharField(max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput())
+
+
+class OtpForm(forms.Form):
+    otp = forms.CharField(max_length=40)

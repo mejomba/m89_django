@@ -5,7 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-    {{ user.username }}
+<h1>profile {{ user.username }}</h1>
+
     {% for room in user_room %}
         {{ room.room_id.room_number }}
     {% endfor %}
