@@ -1,7 +1,12 @@
 from django.db import models
-from users.models import Author
+from users.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from django.core.validators import RegexValidator
+
+
+class BookManager(models.Manager):
+    def author(self):
+        return self.filter(status='P')
 
 
 class Book(models.Model):
@@ -12,8 +17,9 @@ class Book(models.Model):
     discount = models.ForeignKey('Discount', on_delete=models.CASCADE, null=True, blank=True)
     publisher = models.ForeignKey('Publisher', on_delete=models.CASCADE)
     category = models.ManyToManyField('Category', related_name='book_category')
-    author = models.ManyToManyField(Author, related_name='book_author')
+    author = models.ManyToManyField(User, related_name='book_author')
 
+    # objects = BookManager()
     @property
     def totaly(self):
         if self.discount:

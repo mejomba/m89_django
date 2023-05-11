@@ -15,12 +15,17 @@ class Product(models.Model):
     name = models.CharField(max_length=250)
     count = models.PositiveIntegerField()
     price = models.PositiveIntegerField()
-    image = models.FileField(null=True)
+    thumbnail = models.FileField(null=True)
     # json_data = jsonfield.JSONField(null=True, blank=True)
     category = models.ForeignKey('Category', on_delete=models.PROTECT, null=True)
 
     create_at = models.DateTimeField(auto_now_add=True)
     last_update = models.DateTimeField(auto_now=True)
+
+
+class ProductImage(models.Model):
+    product = models.ForeignKey('Product', on_delete=models.CASCADE)
+    image = models.FileField(upload_to='media')
 
 
 class Category(models.Model):

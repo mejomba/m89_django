@@ -1,6 +1,18 @@
 from django.contrib import admin
-from .models import Author, User, Customer
+from .models import User
+from django.contrib.auth.admin import UserAdmin
 
-admin.site.register(Author)
-admin.site.register(User)
-admin.site.register(Customer)
+from .forms import CustomUserCreationForm, CustomUserChangeForm
+
+
+# class CustomUserAdmin(UserAdmin):
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = User
+    list_display = ("email", "username", 'is_author')
+    list_filter = ('is_author', 'is_customer')
+    # search_fields = ('username', 'email')
+
+
+admin.site.register(User, CustomUserAdmin)
