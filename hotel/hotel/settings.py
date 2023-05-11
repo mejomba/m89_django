@@ -146,3 +146,11 @@ CACHES = {
     }
 }
 CACHE_TTL = 60 * 15
+
+PASSWORD_RESET_TIMEOUT = 60 * 2
+
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'youremail@gmail.com'
+EMAIL_HOST_PASSWORD = 'yourpassword'
+EMAIL_PORT = 587

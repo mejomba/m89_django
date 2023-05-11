@@ -1,17 +1,25 @@
+import time
+
 from django.conf import settings
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.core.mail import EmailMessage
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
+from django.utils.encoding import force_bytes, force_str
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import generic
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
 
 from .forms import CustomUserCreationForm, ReserveRoomForm, CustomLoginForm, OtpForm
 from .models import Room, UserRoom, User
-
+from .tokens import account_activation_token
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
@@ -41,6 +49,54 @@ class SignUp(generic.CreateView):
     success_url = reverse_lazy('login')
     template_name = 'core/signup.html'
 
+    def post(self, request, *args, **kwargs):
+        form = CustomUserCreationForm(request.POST)
+        if form.is_valid():
+            print('form')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            mail_subject = "فعال سازی حساب کاربری"
+            context = {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                'token': account_activation_token.make_token(user)
+            }
+            print(current_site, context['uid'], context['token'])
+            message = render_to_string('core/acc_activate_email.html', context)
+            to_email = form.cleaned_data.get('email')
+            email = EmailMessage(mail_subject, message, to=[to_email])
+            print('before send')
+            # time.sleep(5)
+            email.send()
+            print('email send')
+            return HttpResponse('برو ایمیلت رو چک کن')
+        else:
+            form = CustomUserCreationForm(request.POST)
+            return render(request, 'core/signup.html', {'form': form})
+
+    def get(self, request):
+        form = CustomUserCreationForm()
+        return render(request, 'core/signup.html', {'form': form})
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user: User = User.objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('profile')
+        # return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('لینک منقضی شده')
 
 class Login(generic.View):
     def post(self, request):
@@ -48,7 +104,6 @@ class Login(generic.View):
         password = request.POST.get('password')
         form_login = CustomLoginForm(request.POST)
         form_otp = OtpForm(request.POST)
-
 
         if form_login.is_valid():
             print('login form')
