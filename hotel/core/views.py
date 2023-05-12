@@ -1,7 +1,7 @@
 import time
 
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, get_user_model
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
@@ -20,6 +20,7 @@ from django.core.cache import cache
 from .forms import CustomUserCreationForm, ReserveRoomForm, CustomLoginForm, OtpForm
 from .models import Room, UserRoom, User
 from .tokens import account_activation_token
+
 
 CACHE_TTL = getattr(settings, 'CACHE_TTL', DEFAULT_TIMEOUT)
 
